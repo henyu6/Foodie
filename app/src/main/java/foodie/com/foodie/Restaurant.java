@@ -20,6 +20,7 @@ import java.util.Map;
  * Created by Henry on 2/23/2017.
  */
 public class Restaurant {
+    private final static String TAG="Restaurant";
     private Context base;
     private String API_KEY = "95b29780d5b77c3fe740f185b8b1655e";
     public Restaurant(Context base) {
@@ -34,13 +35,13 @@ public class Restaurant {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("Restaurant", "Response: " + response.toString());
+                        Log.d(TAG, "Response: " + response.toString());
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("Restaurant", "Error:" + error.toString());
+                        Log.d(TAG, "Error:" + error.toString());
                     }
                 }) {
                 @Override

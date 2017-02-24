@@ -2,15 +2,19 @@ package foodie.com.foodie;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 1000;
+    private GPSLocation gpsLocation = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
 
         Restaurant restaurant = new Restaurant(this);
         restaurant.openURL();
+        gpsLocation = new GPSLocation(this);
+        gpsLocation.start();
     }
 
     @Override
@@ -43,4 +49,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 }
