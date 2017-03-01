@@ -11,10 +11,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.Observer;
 
+public class HomePage extends AppCompatActivity implements APIResponseObserver {
+
+    private final static String TAG="HOMEPAGE";
     final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 1000;
     private GPSLocation gpsLocation = null;
+    APIResponseSubject apiResponseSubject = new APIResponseSubject();
+    RestaurantAPI restSearch;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         gpsLocation = new GPSLocation(this);
+        restSearch = new RestaurantAPI(this, apiResponseSubject);
+        apiResponseSubject.attach(this);
         gpsLocation.start();
     }
 
@@ -47,8 +55,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onAPIResponse() {
+        JsonParser parser = new JsonParser();
+        RestaurantList restaurantList = parser.parseResults(restSearch.getResult());
+        restaurantList.getRestaurants();
+        Log.d(TAG, restaurantList.toString());
+    }
+
     public void button(View view) {
-        RestaurantAPI restSearch = new RestaurantAPI(this);
         restSearch.setLocation(gpsLocation.getLocation());
         restSearch.search();
     }

@@ -12,6 +12,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -26,8 +27,12 @@ public class RestaurantAPI {
     private String API_KEY = "95b29780d5b77c3fe740f185b8b1655e";
     private Location location;
     private int radius;
-    public RestaurantAPI(Context base) {
+    private JSONObject result;
+    private APIResponseSubject responseSubject;
+
+    public RestaurantAPI(Context base, APIResponseSubject responseSubject) {
         this.base = base;
+        this.responseSubject = responseSubject;
     }
 
     private String generateURL () {
@@ -36,7 +41,7 @@ public class RestaurantAPI {
         if(location != null) {
 
             url = url + "?lat=" + location.getLatitude() + "&lon=" + location.getLongitude();
-            if(radius != 0) {
+            if (radius != 0) {
                 url = url + "&radius=" + radius;
             }
         }
@@ -51,6 +56,10 @@ public class RestaurantAPI {
         this.radius = rad;
     }
 
+    public JSONObject getResult() {
+        return result;
+    }
+
     public void search() {
         RequestQueue requestQueue = Volley.newRequestQueue(base);
         String url = generateURL();
@@ -61,6 +70,8 @@ public class RestaurantAPI {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, "Response: " + response.toString());
+                        result = response;
+                        responseSubject.notifyAllObservers();
                     }
                 }, new Response.ErrorListener() {
 
