@@ -29,8 +29,6 @@ public class MainActivity extends AppCompatActivity {
                     MY_PERMISSIONS_REQUEST_ACCESS_LOCATION);
         }
 
-        Restaurant restaurant = new Restaurant(this);
-        restaurant.openURL();
         gpsLocation = new GPSLocation(this);
         gpsLocation.start();
     }
@@ -43,11 +41,15 @@ public class MainActivity extends AppCompatActivity {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Please enable locations permissions", Toast.LENGTH_LONG);
+                    Toast.makeText(this, "Please enable locations permissions", Toast.LENGTH_LONG).show();
                 }
-                return;
             }
         }
     }
 
+    public void button(View view) {
+        RestaurantAPI restSearch = new RestaurantAPI(this);
+        restSearch.setLocation(gpsLocation.getLocation());
+        restSearch.search();
+    }
 }
