@@ -20,11 +20,18 @@ public class RestaurantList {
         return restaurants;
     }
 
+    public int getCount() {
+        return restaurants.size();
+    }
+
     @Override
     public String toString() {
         String str = "";
         for(int i = 0; i < restaurants.size(); i++) {
-            str = str + ", " + restaurants.get(i).name;
+            if(str.equals(""))
+                str = str + restaurants.get(i).name;
+            else
+                str = str + ", " + restaurants.get(i).name;
         }
         return str;
     }

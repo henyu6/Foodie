@@ -20,6 +20,8 @@ public class JsonParser {
     private void parseRestaurantJson(JSONArray restaurantArray) throws JSONException {
         for(int i = 0; i < restaurantArray.length(); i++) {
             JSONObject currRest = restaurantArray.getJSONObject(i).getJSONObject("restaurant");
+            if(currRest == null) return;
+
             Restaurant restaurant = new Restaurant();
             restaurant.id =  currRest.getInt("id");
             restaurant.name = currRest.getString("name");
@@ -36,6 +38,8 @@ public class JsonParser {
     }
 
     public RestaurantList parseResults(JSONObject result) {
+        if(result == null) return restaurants;
+
         try {
             JSONArray restaurantArray = result.getJSONArray("restaurants");
             parseRestaurantJson(restaurantArray);

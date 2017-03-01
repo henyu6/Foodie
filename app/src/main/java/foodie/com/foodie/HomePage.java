@@ -20,6 +20,7 @@ public class HomePage extends AppCompatActivity implements APIResponseObserver {
     private GPSLocation gpsLocation = null;
     APIResponseSubject apiResponseSubject = new APIResponseSubject();
     RestaurantAPI restSearch;
+    JsonParser parser;
 
 
     @Override
@@ -37,6 +38,7 @@ public class HomePage extends AppCompatActivity implements APIResponseObserver {
 
         gpsLocation = new GPSLocation(this);
         restSearch = new RestaurantAPI(this, apiResponseSubject);
+        parser = new JsonParser();
         apiResponseSubject.attach(this);
         gpsLocation.start();
     }
@@ -57,10 +59,10 @@ public class HomePage extends AppCompatActivity implements APIResponseObserver {
 
     @Override
     public void onAPIResponse() {
-        JsonParser parser = new JsonParser();
         RestaurantList restaurantList = parser.parseResults(restSearch.getResult());
         restaurantList.getRestaurants();
         Log.d(TAG, restaurantList.toString());
+        Log.d(TAG, restaurantList.getCount() + "");
     }
 
     public void button(View view) {
