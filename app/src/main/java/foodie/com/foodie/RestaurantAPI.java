@@ -23,7 +23,7 @@ import java.util.Map;
  * Created by Henry on 2/23/2017.
  */
 public class RestaurantAPI {
-    private final static String TAG="Restaurant";
+    private final static String TAG="RestaurantAPI";
     private Context base;
     private String API_KEY = "95b29780d5b77c3fe740f185b8b1655e";
     private Location location;

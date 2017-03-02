@@ -7,23 +7,15 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="foodie.com.foodie.HomePage">
+    tools:context="foodie.com.foodie.DisplayRestaurant">
 
-    <Button
-        android:layout_width="300dp"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Find a Restaurant"
-        android:id="@+id/selectBtn"
+        android:text="Place holder"
+        android:textSize="20dp"
+        android:id="@+id/name"
         android:layout_centerInParent="true"
-        android:onClick="button"/>
-
-    <Button
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:id="@+id/settings"
-        android:text="Settings"
-        android:layout_centerInParent="true"
-        android:layout_below="@+id/selectBtn"/>
+        android:layout_alignParentTop="true"/>
 
 </RelativeLayout>

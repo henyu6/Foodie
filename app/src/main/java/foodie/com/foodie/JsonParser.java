@@ -48,4 +48,8 @@ public class JsonParser {
         }
         return restaurants;
     }
+
+    public RestaurantList getResults() {
+        return restaurants;
+    }
 }

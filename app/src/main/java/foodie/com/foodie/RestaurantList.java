@@ -1,11 +1,12 @@
 package foodie.com.foodie;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Henry on 3/1/2017.
  */
-public class RestaurantList {
+public class RestaurantList implements Serializable {
     private ArrayList<Restaurant> restaurants;
 
     public RestaurantList() {

@@ -1,6 +1,7 @@
 package foodie.com.foodie;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.v4.app.ActivityCompat;
@@ -18,6 +19,7 @@ public class HomePage extends AppCompatActivity implements APIResponseObserver {
     private final static String TAG="HOMEPAGE";
     final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 1000;
     private GPSLocation gpsLocation = null;
+    private boolean firstLaunch = true;
     APIResponseSubject apiResponseSubject = new APIResponseSubject();
     RestaurantAPI restSearch;
     JsonParser parser;
@@ -60,9 +62,15 @@ public class HomePage extends AppCompatActivity implements APIResponseObserver {
     @Override
     public void onAPIResponse() {
         RestaurantList restaurantList = parser.parseResults(restSearch.getResult());
-        restaurantList.getRestaurants();
         Log.d(TAG, restaurantList.toString());
         Log.d(TAG, restaurantList.getCount() + "");
+
+        if(firstLaunch) {
+            firstLaunch = false;
+            Intent intent = new Intent(this, DisplayRestaurant.class);
+            intent.putExtra("restaurants", restaurantList.getRestaurants());
+            startActivity(intent);
+        }
     }
 
     public void button(View view) {
