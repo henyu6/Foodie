@@ -11,6 +11,7 @@ import java.util.Random;
 public class DisplayRestaurant extends AppCompatActivity {
     private ArrayList<Restaurant> restaurants;
     private final static String TAG="DisplayRestaurant";
+    private boolean isDoneRetrieving = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +23,17 @@ public class DisplayRestaurant extends AppCompatActivity {
         displayRestaurant(selected);
     }
 
+    private void getNewList() {
+        boolean finish = getIntent().getBooleanExtra("isDoneRetrieving", false);
+        if(!finish && !isDoneRetrieving) {
+            if((ArrayList<Restaurant>) getIntent().getSerializableExtra("newRestaurants") == null)
+                return;
+            restaurants = (ArrayList<Restaurant>) getIntent().getSerializableExtra("newRestaurants");
+            isDoneRetrieving = finish;
+        }
+    }
     private void displayRestaurant(Restaurant restaurant) {
+        getNewList();
         TextView name = (TextView)findViewById(R.id.name);
         name.setText(restaurant.name);
         TextView address = (TextView) findViewById(R.id.address);

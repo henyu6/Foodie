@@ -57,9 +57,9 @@ public class GPSLocation implements GoogleApiClient.ConnectionCallbacks, GoogleA
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Log.d(TAG, "Locations API connected successfully");
         getLastKnownLocation();
         locationSubject.notifyAllObservers();
+        Log.d(TAG, "Locations API connected successfully");
     }
 
     @Override

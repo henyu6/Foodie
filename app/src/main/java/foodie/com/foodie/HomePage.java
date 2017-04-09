@@ -20,10 +20,12 @@ public class HomePage extends AppCompatActivity implements APIResponseObserver, 
     final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 1000;
     private GPSLocation gpsLocation = null;
     private boolean firstLaunch = true;
-    APIResponseSubject apiResponseSubject = new APIResponseSubject();
-    LocationSubject locationSubject = new LocationSubject();
-    RestaurantAPI restSearch;
-    JsonParser parser;
+    private APIResponseSubject apiResponseSubject = new APIResponseSubject();
+    private LocationSubject locationSubject = new LocationSubject();
+    private RestaurantAPI restSearch;
+    private JsonParser parser;
+    private RestaurantList restaurantList;
+    private Intent displayRest = new Intent(this, DisplayRestaurant.class);;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class HomePage extends AppCompatActivity implements APIResponseObserver, 
         restSearch = new RestaurantAPI(this, apiResponseSubject);
         parser = new JsonParser();
         apiResponseSubject.attach(this);
+        locationSubject.attach(this);
         gpsLocation.start();
     }
 
@@ -62,25 +65,31 @@ public class HomePage extends AppCompatActivity implements APIResponseObserver, 
     @Override
     public void onLocationResponse(){
         restSearch.setLocation(gpsLocation.getLocation());
+        Log.d(TAG, "STARTING RETRIEVAL");
         restSearch.search();
     }
 
     @Override
     public void onAPIResponse() {
-        RestaurantList restaurantList = parser.parseResults(restSearch.getResult());
+        restaurantList = parser.parseResults(restSearch.getResult());
         Log.d(TAG, restaurantList.toString());
         Log.d(TAG, restaurantList.getCount() + "");
 
-        Intent intent = new Intent(this, DisplayRestaurant.class);
-        if(firstLaunch && restSearch.isDoneRetrieving()) {
-            firstLaunch = false;
-            intent.putExtra("restaurants", restaurantList.getRestaurants());
-            startActivity(intent);
+        if(restaurantList.getRestaurants() != null) {
+            displayRest.putExtra("newRestaurants", restaurantList.getRestaurants());
         }
+
         Log.e(TAG, "REST SIZE" + restaurantList.getCount());
     }
 
     public void button(View view) {
-
+        if(firstLaunch) {
+            firstLaunch = false;
+            displayRest.putExtra("isDoneRetrieving", restSearch.isDoneRetrieving());
+            if(restaurantList.getRestaurants() != null) {
+                displayRest.putExtra("restaurants", restaurantList.getRestaurants());
+            }
+            startActivity(displayRest);
+        }
     }
 }
