@@ -30,6 +30,7 @@ public class RestaurantAPI {
     private int radius, resultOffset;
     private JSONObject result;
     private APIResponseSubject responseSubject;
+    private boolean doneRetrieving = false;
 
     public RestaurantAPI(Context base, APIResponseSubject responseSubject) {
         this.base = base;
@@ -81,12 +82,16 @@ public class RestaurantAPI {
                 if(totalResults > resultOffset) {
                     Log.d(TAG, "Getting more results...");
                     search();
+                } else if(totalResults < resultOffset) {
+                    doneRetrieving = true;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
     }
+
+    public boolean isDoneRetrieving() { return doneRetrieving; }
 
     public void search() {
         RequestQueue requestQueue = Volley.newRequestQueue(base);

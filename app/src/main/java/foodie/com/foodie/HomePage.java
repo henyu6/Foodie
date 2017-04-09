@@ -14,16 +14,16 @@ import android.widget.Toast;
 
 import java.util.Observer;
 
-public class HomePage extends AppCompatActivity implements APIResponseObserver {
+public class HomePage extends AppCompatActivity implements APIResponseObserver, LocationObserver {
 
     private final static String TAG="HOMEPAGE";
     final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 1000;
     private GPSLocation gpsLocation = null;
     private boolean firstLaunch = true;
     APIResponseSubject apiResponseSubject = new APIResponseSubject();
+    LocationSubject locationSubject = new LocationSubject();
     RestaurantAPI restSearch;
     JsonParser parser;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class HomePage extends AppCompatActivity implements APIResponseObserver {
                     MY_PERMISSIONS_REQUEST_ACCESS_LOCATION);
         }
 
-        gpsLocation = new GPSLocation(this);
+        gpsLocation = new GPSLocation(this, locationSubject);
         restSearch = new RestaurantAPI(this, apiResponseSubject);
         parser = new JsonParser();
         apiResponseSubject.attach(this);
@@ -60,21 +60,27 @@ public class HomePage extends AppCompatActivity implements APIResponseObserver {
     }
 
     @Override
+    public void onLocationResponse(){
+        restSearch.setLocation(gpsLocation.getLocation());
+        restSearch.search();
+    }
+
+    @Override
     public void onAPIResponse() {
         RestaurantList restaurantList = parser.parseResults(restSearch.getResult());
         Log.d(TAG, restaurantList.toString());
         Log.d(TAG, restaurantList.getCount() + "");
 
-        if(firstLaunch) {
+        Intent intent = new Intent(this, DisplayRestaurant.class);
+        if(firstLaunch && restSearch.isDoneRetrieving()) {
             firstLaunch = false;
-            Intent intent = new Intent(this, DisplayRestaurant.class);
             intent.putExtra("restaurants", restaurantList.getRestaurants());
             startActivity(intent);
         }
+        Log.e(TAG, "REST SIZE" + restaurantList.getCount());
     }
 
     public void button(View view) {
-        restSearch.setLocation(gpsLocation.getLocation());
-        restSearch.search();
+
     }
 }

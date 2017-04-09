@@ -20,8 +20,9 @@ public class GPSLocation implements GoogleApiClient.ConnectionCallbacks, GoogleA
     private GoogleApiClient mGoogleApiClient = null;
     private Location location;
     private final static String TAG="GPS LOCATION";
+    private LocationSubject locationSubject;
 
-    public GPSLocation(Context base) {
+    public GPSLocation(Context base, LocationSubject locationSubject) {
         this.base = base;
 
         if (mGoogleApiClient == null) {
@@ -31,6 +32,8 @@ public class GPSLocation implements GoogleApiClient.ConnectionCallbacks, GoogleA
                     .addApi(LocationServices.API)
                     .build();
         }
+
+        this.locationSubject = locationSubject;
     }
 
     public void start() {
@@ -56,6 +59,7 @@ public class GPSLocation implements GoogleApiClient.ConnectionCallbacks, GoogleA
     public void onConnected(@Nullable Bundle bundle) {
         Log.d(TAG, "Locations API connected successfully");
         getLastKnownLocation();
+        locationSubject.notifyAllObservers();
     }
 
     @Override

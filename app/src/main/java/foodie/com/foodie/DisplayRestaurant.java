@@ -17,6 +17,7 @@ public class DisplayRestaurant extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_restaurant);
         restaurants = (ArrayList<Restaurant>) getIntent().getSerializableExtra("restaurants");
+        Log.d(TAG, "Restaurants Count: " + restaurants.size());
         Restaurant selected = selectRandom();
         displayRestaurant(selected);
     }
@@ -24,7 +25,8 @@ public class DisplayRestaurant extends AppCompatActivity {
     private void displayRestaurant(Restaurant restaurant) {
         TextView name = (TextView)findViewById(R.id.name);
         name.setText(restaurant.name);
-        Log.d(TAG, "Restaurants Count: " + restaurants.size());
+        TextView address = (TextView) findViewById(R.id.address);
+        address.setText(restaurant.address);
     }
 
     public Restaurant selectRandom() {
@@ -33,4 +35,5 @@ public class DisplayRestaurant extends AppCompatActivity {
 
         return restaurants.get(ranInt);
     }
+
 }
